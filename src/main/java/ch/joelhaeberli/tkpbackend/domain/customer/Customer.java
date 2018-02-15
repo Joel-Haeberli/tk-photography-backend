@@ -2,10 +2,7 @@ package ch.joelhaeberli.tkpbackend.domain.customer;
 
 import ch.joelhaeberli.tkpbackend.domain.ort.Ort;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Customer {
@@ -17,6 +14,7 @@ public class Customer {
     private String prename;
     private String email;
     private String adresse;
+    @ManyToOne(targetEntity = Ort.class, fetch = FetchType.LAZY)
     private Ort ort;
     private Boolean agbAccepted;
 

@@ -27,10 +27,10 @@ public class PictureSaverTester {
         System.out.println("Saved Picture 03 : " + name3);
 
         // Create Thumbnail from Picture
-        BufferedImage bufferedImage = PictureHandler.getThumbnailFromImage(name3);
-        String thumbnail = PictureHandler.savePicture(bufferedImage);
+       // BufferedImage bufferedImage = PictureHandler.getThumbnailFromImage(name3);
+       // String thumbnail = PictureHandler.savePicture(bufferedImage);
 
-        System.out.println("Saved Thumbnail : " + thumbnail);
+      //  System.out.println("Saved Thumbnail : " + thumbnail);
     }
 
     private static BufferedImage createImageWithText(){

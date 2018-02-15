@@ -3,10 +3,7 @@ package ch.joelhaeberli.tkpbackend.domain.order;
 import ch.joelhaeberli.tkpbackend.domain.customer.Customer;
 import ch.joelhaeberli.tkpbackend.domain.picture.Picture;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +12,9 @@ public class PictureOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne(targetEntity = Customer.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Customer customer;
+    @ManyToOne(targetEntity = Picture.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Picture picture;
     private String notice;
     private LocalDateTime orderedAt;

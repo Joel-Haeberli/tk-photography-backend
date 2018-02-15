@@ -2,6 +2,8 @@ package ch.joelhaeberli.tkpbackend;
 
 import ch.joelhaeberli.tkpbackend.domain.customer.Customer;
 import ch.joelhaeberli.tkpbackend.domain.picture.Picture;
+import ch.joelhaeberli.tkpbackend.service.ImageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,19 +15,22 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 @Controller
 public class TkpCustomerController {
 
-    @GetMapping("/image/{id}")
-    public ResponseEntity<Object> getPicture(@PathVariable long id) {
-        throw new NotImplementedException();
+    @Autowired
+    ImageService imageService;
+
+    @GetMapping("/image/{uuid}")
+    public ResponseEntity<Object> getPicture(@PathVariable String uuid) {
+        return ResponseEntity.ok(imageService.loadImage(uuid));
     }
 
-    @GetMapping("/images/{number}")
-    public ResponseEntity<Object> getNumberOfThumbnails(@PathVariable long number) {
-        return ResponseEntity.ok(new SystemMessage("Diese Funktion wurde noch nicht implementiert"));
+    @GetMapping("/images/{lastIndex}")
+    public ResponseEntity<Object> getNumberOfThumbnails(@PathVariable long lastIndex) {
+        return ResponseEntity.ok(imageService.getPictures(lastIndex));
     }
 
-    @GetMapping("/thumbnail/{id}")
-    public ResponseEntity<Object> getThumbnail(@PathVariable long id) {
-        return ResponseEntity.ok(new SystemMessage("Diese Funktion wurde noch nicht implementiert"));
+    @GetMapping("/thumbnail/{uuid}")
+    public ResponseEntity<Object> getThumbnail(@PathVariable String uuid) {
+        return ResponseEntity.ok(imageService.loadThumbnail(uuid));
     }
 
     @GetMapping("/pagecontent/{key}")

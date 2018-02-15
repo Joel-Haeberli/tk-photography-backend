@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -23,16 +24,16 @@ public class PictureHandler {
 
     private static final int THUMBNAIL_SCALE_FACTOR = 5;
 
-    public static BufferedImage getBufferedImageFromByteArray(byte[] raw) {
-        try {
-            return ImageIO.read(new ByteArrayInputStream(raw));
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        return null;
+    //return picture path
+    public static String savePicture(byte[] pictureData) {
+        return savePicture(getBufferedImageFromByteArray(pictureData));
     }
 
-    public static BufferedImage getThumbnailFromImage(String pictureName) {
+    public static byte[] getPictureAsByteArrayFromDisk(String pictureName) {
+        return getBytes(getBufferedImageFromDisk(pictureName));
+    }
+
+    public static byte[] getThumbnailFromImage(String pictureName) {
 
         BufferedImage bufferedImage = getBufferedImageFromDisk(pictureName);
         if (bufferedImage != null) {
@@ -46,10 +47,23 @@ public class PictureHandler {
             graphics.drawImage(image, 0, 0, null);
             graphics.dispose();
 
-            return bufferedImage;
+            return getBytes(bufferedImage);
         }
         logger.error(GeneralErrors.COULD_NOT_LOAD_PICTURE);
         return null;
+    }
+
+    public static String savePicture(BufferedImage bufferedImage) {
+        String pictureName = getUniquePictureName();
+        File f = new File(PICTURE_PATH + pictureName);
+        f.mkdirs();
+        try {
+            ImageIO.write(bufferedImage,PICTURE_FORMAT,f);
+            return pictureName;
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+        return GeneralErrors.COULD_NOT_SAVE_PICTURE;
     }
 
     public static BufferedImage getBufferedImageFromDisk(String pictureName) {
@@ -73,27 +87,33 @@ public class PictureHandler {
         return f;
     }
 
-    //return picture path
-    public static String savePicture(byte[] pictureData) {
-        return savePicture(getBufferedImageFromByteArray(pictureData));
-    }
-
-    public static String savePicture(BufferedImage bufferedImage) {
-        String pictureName = getUniquePictureName();
-        File f = new File(PICTURE_PATH + pictureName);
-        f.mkdirs();
+    private static BufferedImage getBufferedImageFromByteArray(byte[] raw) {
         try {
-            ImageIO.write(bufferedImage,PICTURE_FORMAT,f);
-            return pictureName;
+            return ImageIO.read(new ByteArrayInputStream(raw));
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-        return GeneralErrors.COULD_NOT_SAVE_PICTURE;
+        return null;
     }
 
     private static String getUniquePictureName() {
         String uuid = UUID.randomUUID().toString() + "." + PICTURE_FORMAT;
         logger.info("generated name is " + uuid);
         return uuid;
+    }
+
+    private static byte[] getBytes(BufferedImage bufferedImage) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
+            ImageIO.write( bufferedImage, PICTURE_FORMAT, baos);
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            baos.close();
+            return imageInByte;
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+        return null;
     }
 }
