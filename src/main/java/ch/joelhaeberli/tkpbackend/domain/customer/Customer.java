@@ -1,8 +1,9 @@
 package ch.joelhaeberli.tkpbackend.domain.customer;
 
-import ch.joelhaeberli.tkpbackend.domain.ort.Ort;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Customer {
@@ -14,8 +15,9 @@ public class Customer {
     private String prename;
     private String email;
     private String adresse;
-    @ManyToOne(targetEntity = Ort.class, fetch = FetchType.LAZY)
-    private Ort ort;
+    private String ort;
+    private Integer plz;
+    private String country;
     private Boolean agbAccepted;
 
     public Customer() {
@@ -57,12 +59,28 @@ public class Customer {
         this.adresse = adresse;
     }
 
-    public Ort getOrt() {
+    public String getOrt() {
         return ort;
     }
 
-    public void setOrt(Ort ort) {
+    public void setOrt(String ort) {
         this.ort = ort;
+    }
+
+    public Integer getPlz() {
+        return plz;
+    }
+
+    public void setPlz(Integer plz) {
+        this.plz = plz;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public Boolean getAgbAccepted() {

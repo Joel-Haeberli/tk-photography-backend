@@ -1,24 +1,24 @@
-package ch.joelhaeberli.tkpbackend.domain.keyvalue;
+package ch.joelhaeberli.tkpbackend.domain.setting;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class KeyValue {
+public class Setting {
 
     @Id
-    public String key;
+    public String id;
     public String value;
 
-    public KeyValue() {
+    public Setting() {
     }
 
-    public String getKey() {
-        return key;
+    public String getId() {
+        return id;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getValue() {

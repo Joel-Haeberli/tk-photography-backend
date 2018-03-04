@@ -19,24 +19,23 @@ import static ch.joelhaeberli.tkpbackend.common.general.GeneralSuccess.DELETING_
 import static ch.joelhaeberli.tkpbackend.common.general.GeneralSuccess.PICTURE_SAVED_SUCCESSFUL;
 
 @Service
-public class ImageService {
+public class PictureService {
 
-    Logger logger = LoggerFactory.getLogger(ImageService.class);
+    Logger logger = LoggerFactory.getLogger(PictureService.class);
 
     private static final int PAGE_SIZE = 10;
 
     @Autowired
-    PictureRepo pictureRepo;
+    private PictureRepo pictureRepo;
 
     public HashMap<Picture, byte[]> getPictures(long lastIndex) {
 
         HashMap<Picture, byte[]> picturesAndRaws = new HashMap<>();
-        List<Picture> pictures = pictureRepo.getAllByIdOrderByIdDesc();
+        List<Picture> pictures = pictureRepo.findAllByIdOrderByIdDesc(lastIndex);
+
         pictures.forEach(picture -> {
-            int picCount = 0;
-            if (picCount <= PAGE_SIZE && picture.getId() > lastIndex) {
+            if (picturesAndRaws.size() <= PAGE_SIZE && picture.getId() > lastIndex) {
                 picturesAndRaws.put(picture, PictureHandler.getPictureAsByteArrayFromDisk(picture.getPictureName()));
-                picCount++;
             }
         });
 
