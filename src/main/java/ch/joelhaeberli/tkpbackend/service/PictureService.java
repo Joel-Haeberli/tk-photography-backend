@@ -7,8 +7,10 @@ import ch.joelhaeberli.tkpbackend.domain.picture.PictureRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,20 +25,20 @@ public class PictureService {
 
     Logger logger = LoggerFactory.getLogger(PictureService.class);
 
-    private static final int PAGE_SIZE = 10;
-
     @Autowired
     private PictureRepo pictureRepo;
 
-    public HashMap<Picture, byte[]> getPictures(long lastIndex) {
+    public HashMap<Picture, byte[]> getPictures() {
 
         HashMap<Picture, byte[]> picturesAndRaws = new HashMap<>();
-        List<Picture> pictures = pictureRepo.findAllByIdOrderByIdDesc(lastIndex);
+        List<Picture> pictures = new ArrayList<>();
+
+        pictureRepo.findAll().forEach(picture -> {
+            pictures.add(picture);
+        });
 
         pictures.forEach(picture -> {
-            if (picturesAndRaws.size() <= PAGE_SIZE && picture.getId() > lastIndex) {
-                picturesAndRaws.put(picture, PictureHandler.getPictureAsByteArrayFromDisk(picture.getPictureName()));
-            }
+            picturesAndRaws.put(picture, PictureHandler.getPictureAsByteArrayFromDisk(picture.getPictureName()));
         });
 
         return picturesAndRaws;

@@ -33,7 +33,7 @@ public class TkpCustomerController {
 
     @GetMapping(value = "images/{lastIndex}")
     public ResponseEntity<Object> getNumberOfThumbnails(@PathVariable long lastIndex) {
-        return ResponseEntity.ok(pictureService.getPictures(lastIndex));
+        return ResponseEntity.ok(pictureService.getPictures());
     }
 
     @GetMapping(value = "thumbnail/{uuid}")
